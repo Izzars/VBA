@@ -1,0 +1,35 @@
+''General Report Variables
+Global Login As String
+
+
+''Email Global Variables
+Global Email_to As String
+Global Email_CC As String
+Global Email_BCC As String
+Global Email_Subject As String
+Global Mail_Body As String
+
+''ADO Global Variables
+Global Piv_Name As String
+Global Sheet_Name As String
+Global Table_Range As String
+Global Table_Start As String
+Global ADO_Type As String
+Global cnPubs As ADODB.Connection
+Global rsPubs As ADODB.Recordset
+Global cmd As ADODB.Command
+Global DBase_String As String
+Global Provider As String
+Global DBSource As String
+Global QuerySQL As String
+Global SQLProc As String
+Global UserName As String
+
+
+''HTML Global Variables
+Global HTML_Text As String
+
+''Testing Global Variables
+
+
+''Specific Report Global Variables

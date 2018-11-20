@@ -1,0 +1,38 @@
+Sub Import_Query_SQL()
+    
+    ' Set sheet variables
+    
+    Sheet_Name = "CoreDatasets" '<--- Enter the sheet the Pivot Table is on here
+    
+'    Table_Range = "" '<--- Enter the Range of the Data Table
+    Table_Start = "A3" '<--- Enter the cell reference for the first cell of the Data Table
+    
+    ' Define Database Access Details
+    Provider = "SQLOLEDB" '<---- Input SQL Provider
+    DBSource = "" '<---- Input the SQL Source
+    DBase_String = "" '<---- Full path to Access Database or database title as required
+    ADO_Type = "SQL Server" '<---- State type of ADO transfer to be used from "Access", "Access v10", "Access v10 w/Password" & "SQL Server"
+    
+    ' Enter SQL Query to be passed to Database.
+    
+    QuerySQL = "Select  "
+    QuerySQL = QuerySQL & "AreaCode "
+    QuerySQL = QuerySQL & ",AreaDescription "
+    QuerySQL = QuerySQL & ",AreaFullDescription "
+    QuerySQL = QuerySQL & ",AreaTypeID "
+    QuerySQL = QuerySQL & ",StartDate "
+    QuerySQL = QuerySQL & ",EndDate "
+    QuerySQL = QuerySQL & ",StartDayID "
+    QuerySQL = QuerySQL & ",EndDayID "
+    QuerySQL = QuerySQL & "From  "
+    QuerySQL = QuerySQL & "[iu_reporting].[dbo].[DIM_GEO_Areas]  "
+    QuerySQL = QuerySQL & "Where "
+    QuerySQL = QuerySQL & "StartDate <= GetDate() "
+    QuerySQL = QuerySQL & "And "
+    QuerySQL = QuerySQL & "Enddate > GetDate() "
+
+ 
+'    Call Pivot_Refresh
+    Call Import_QueryData
+
+End Sub

@@ -1,0 +1,7 @@
+Function GetMemory(rngPT As Range) As Long
+'pivot table tutorial by contextures.com
+  Dim pt As PivotTable
+  Set pt = rngPT.PivotTable
+  GetMemory = ActiveWorkbook _
+    .PivotCaches(pt.CacheIndex).MemoryUsed
+End Function

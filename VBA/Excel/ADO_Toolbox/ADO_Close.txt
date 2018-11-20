@@ -1,0 +1,9 @@
+Sub Close_Access_Connect_ADO()
+
+' Closes an ADO Connection to an MS Access Database
+
+    cnPubs.Close
+    Set rsPubs = Nothing
+    Set cnPubs = Nothing
+
+End Sub

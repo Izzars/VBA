@@ -1,0 +1,43 @@
+Sub Export_To_AccessDatabase()
+
+' Set sheet variables
+
+    Dim Sheet_Name As String
+    Dim Table_Name As String
+    Dim Count_1 As Long
+    
+    Sheet_Name = "" '<--- Enter the sheet the Data Table is on here
+    Table_Name = "" '<--- Enter the Database Table Name here
+
+' Define Database Access Details
+    DBSource = "" '<---- Input the SQL Source
+    DBase_String = "" '<---- Full path to Access Database or database title as required
+    
+' Open Connection
+'    Call Open_Access_Connect_ADO
+'    Call Open_Access10_Connect_ADO
+'    Call Open_Access10wPword_Connect_ADO
+
+' Define a recordset object.
+
+    Set rsPubs = New ADODB.Recordset
+
+    rsPubs.Open Table_Name, cnPubs, adOpenKeyset, adLockOptimistic, adCmdTable
+    
+    Count_1 = 0
+    
+        Do While Sheets(Sheet_Name).Range("B7").Offset(Count_1, 0).Value <> ""
+        With rsPubs
+            .AddNew
+            .Fields("FieldName") = Range("B7").Offset(Count_1, 0).Value
+           
+            
+            .Update ' stores the new record
+        End With
+        Count_1 = Count_1 + 1 'next row
+    Loop
+
+    ' Close Connection
+    Call Close_Access_Connect_ADO
+
+End Sub

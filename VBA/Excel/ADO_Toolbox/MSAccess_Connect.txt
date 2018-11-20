@@ -1,0 +1,12 @@
+Sub Open_Access_Connect_ADO()
+
+' Opens an ADO Connection to an MS Access Database
+
+    Set cnPubs = New ADODB.Connection
+    With cnPubs
+        .Provider = "Microsoft.Jet.OLEDB.4.0"
+        .ConnectionString = "Data Source= " & DBase_String & ";"
+        .Open
+    End With
+
+End Sub

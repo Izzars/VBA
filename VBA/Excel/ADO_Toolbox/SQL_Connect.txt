@@ -1,0 +1,13 @@
+Sub Open_SQL_Connect_ADO()
+
+    Set cnPubs = New ADODB.Connection
+    With cnPubs
+        .ConnectionTimeout = 0
+        .CommandTimeout = 0
+        .Provider = Provider
+        .ConnectionString = "Data Source = " & DBSource & "; Initial Catalog= " & DBase_String & " ;Integrated Security =SSPI;"
+
+        .Open
+    End With
+
+End Sub

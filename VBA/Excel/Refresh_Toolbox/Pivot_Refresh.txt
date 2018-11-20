@@ -1,0 +1,58 @@
+Sub Pivot_Refresh()
+
+' Set sheet variables
+    Set wbBook = ThisWorkbook
+    Set wsSheet = wbBook.Worksheets(Sheet_Name)
+    Piv_1 = Worksheets(Sheet_Name).PivotTables(Piv_Name).CacheIndex
+    Set ptCache = wbBook.PivotCaches(Piv_1)
+    
+' Open Connection
+    
+    Select Case ADO_Type
+        Case "Access"
+            Call Open_Access_Connect_ADO
+        Case "Access v10"
+            Call Open_Access10_Connect_ADO
+        Case "Access v10 w/Password"
+            Call Open_Access10wPword_Connect_ADO
+        Case "SQL Server"
+            Call Open_SQL_Connect_ADO
+        Case Else
+            MsgBox "Please check that an appropriate ADO type has been selected"
+    End Select
+
+' Define a recordset object.
+
+    Set rsPubs = New ADODB.Recordset
+
+' Update Recordset
+    With rsPubs
+        ' Assign the Connection object.
+        .ActiveConnection = cnPubs
+        ' Extract the required records.
+        .Open QuerySQL
+    End With
+
+' Add the Recordset as the source.
+    Set ptCache.Recordset = rsPubs
+
+    With wsSheet
+        Set ptTable = .PivotTables(Piv_Name)
+    End With
+     
+' Refresh the data.
+    ptTable.RefreshTable
+
+' Release the Recordset from the memory.
+    If CBool(rsPubs.State And adStateOpen) Then rsPubs.Close
+    Set rst = Nothing
+
+' Close Connection
+    
+    Call Close_Access_Connect_ADO
+    
+'Pre-Select variables
+'    Sheets(Sheet_Name).Select
+'    ActiveSheet.PivotTables(Piv_Name).PivotFields("Order Date").CurrentPage = Format(Date, "DD/MM/YYYY")  '<--Ammend this line to cause a pre-defined variable to be pre-set
+
+End Sub

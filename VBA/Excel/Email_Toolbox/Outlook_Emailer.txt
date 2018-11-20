@@ -1,0 +1,54 @@
+Sub Outlook_Emailer()
+
+'Create Variables
+
+    Dim OutApp As Object
+    Dim OutMail As Object
+    
+' Create HTML Body of the Email
+
+    Mail_Body = "<html>"
+    Mail_Body = Mail_Body & "<head>"
+    Mail_Body = Mail_Body & "</head>"
+    Mail_Body = Mail_Body & "<body>"
+    
+    
+    Mail_Body = Mail_Body & "</body>"
+    Mail_Body = Mail_Body & "</html>"
+
+' Set Session Variables
+
+    Set OutApp = CreateObject("Outlook.Application")
+    OutApp.Session.Logon
+    Set OutMail = OutApp.CreateItem(0)
+    
+' Sets Email variables
+
+    Email_to = ""
+    Email_CC = ""
+    Email_BCC = ""
+    Email_Subject = ""
+    
+' Create & Send Email
+
+    On Error Resume Next
+    With OutMail
+        .To = Email_to '<-- Sets recipient
+        .cc = Email_CC '<-- Sets any persons to be carbon copied in on the email
+        .BCC = Email_BCC '<-- sets anyone to be Blank copied in on the email
+        .Subject = Email_Subject '<-- sets the subject line
+        .HTMLBody = Mail_Body '<-- HTML Body text for the email
+        '.Attachments.Add ("C:\test.txt") '<-- Adds an Attachment
+        '.Send '<-- Sends the email
+        '.save '<-- Saves the email in the Drafts folder
+        .display '<-- Displays the email on the screen
+    End With
+    On Error GoTo 0
+    
+' Clear Session Variables
+
+    Set OutMail = Nothing
+    Set OutApp = Nothing
+
+
+End Sub

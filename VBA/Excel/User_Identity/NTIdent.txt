@@ -1,0 +1,19 @@
+Public Declare Function GetUserName Lib "advapi32.dll" _
+Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
+
+Function ReturnUserName() As String
+' returns the NT Domain User Name
+Dim rString As String * 255, sLen As Long, tString As String
+    tString = ""
+    On Error Resume Next
+    sLen = GetUserName(rString, 255)
+    sLen = InStr(1, rString, Chr(0))
+    If sLen > 0 Then
+        tString = Left(rString, sLen - 1)
+    Else
+        tString = rString
+    End If
+    On Error GoTo 0
+    ReturnUserName = UCase(Trim(tString))
+End Function
+

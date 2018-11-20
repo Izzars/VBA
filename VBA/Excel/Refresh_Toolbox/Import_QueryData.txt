@@ -1,0 +1,40 @@
+Sub Import_QueryData()
+    
+    Select Case ADO_Type
+        Case "Access"
+            Call Open_Access_Connect_ADO
+        Case "Access v10"
+            Call Open_Access10_Connect_ADO
+        Case "Access v10 w/Password"
+            Call Open_Access10wPword_Connect_ADO
+        Case "SQL Server"
+            Call Open_SQL_Connect_ADO
+        Case Else
+            MsgBox "Please check that an appropriate ADO type has been selected"
+    End Select
+
+' Define a recordset object.
+
+    Set rsPubs = New ADODB.Recordset
+    
+' Clear DataSheet
+    Worksheets(Sheet_Name).Select
+    Range(Table_Range).Select
+    Selection.ClearContents
+
+' Update Table
+    With rsPubs
+        ' Assign the Connection object.
+        .ActiveConnection = cnPubs
+        ' Extract the required records.
+        .Open QuerySQL
+        ' Copy the records into cell A1 on Sheet1.
+        Worksheets(Sheet_Name).Range(Table_Start).CopyFromRecordset rsPubs
+        ' Tidy up
+        .Close
+    End With
+
+' Close Connection
+    Call Close_Access_Connect_ADO
+
+End Sub

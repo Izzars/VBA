@@ -1,0 +1,15 @@
+Sub RunProc()
+
+     
+    Call Open_SQL_Connect_ADO
+     
+    Set cmd = New ADODB.Command
+    cmd.ActiveConnection = cnPubs
+    cmd.CommandType = adCmdStoredProc
+    cmd.CommandText = SQLProc
+     
+    cmd.Execute
+    
+    Call Close_Access_Connect_ADO
+
+End Sub

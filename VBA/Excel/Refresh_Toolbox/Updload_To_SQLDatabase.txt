@@ -1,0 +1,116 @@
+Sub Updload_To_SQLDatabase()
+
+' Set sheet variables
+    Dim Table_Range As String
+    Dim Sheet_Name As String
+    Dim Table_Start As String
+    Dim Count1 As Long
+    Dim Count2 As Long
+    Dim L As Long
+    Dim RecCount As Long
+    Dim TCount As Long
+    Dim Query1 As String
+    Dim Query2 As String
+    
+    Sheets("Tab_2").Range("C10") = Now
+    
+    Sheet_Name = "Tab_1" '<--- Enter the sheet the Data Table is on here
+    Table_Range = "B7:J10000" '<--- Enter the Range of the Data Table
+    Table_Start = "B7" '<--- Enter the cell reference for the first cell of the Data Table
+
+' Define Database Access Details
+    Provider = "SQLOLEDB" '<---- Input SQL Provider
+    DBSource = "" '<---- Input the SQL Source
+    DBase_String = "" '<---- Full path to Access Database or database title as required
+    Table_Name = "" '<--- Enter the Database Table Name here
+    
+    
+' Open Connection
+    Call Open_SQL_Connect_ADO
+
+' Define a recordset object.
+
+    Set rsPubs = New ADODB.Recordset
+
+'Create SQL Query
+
+    Count1 = 0
+    Count2 = -1
+
+    Query1 = "Insert into " & Table_Name & " ( " & Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1) & " "
+    
+    Count1 = Count1 + 1
+    
+    Do Until Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1) = ""
+        Query1 = Query1 & ", " & Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1)
+        Count1 = Count1 + 1
+    Loop
+    
+    Query1 = Query1 & ") Values "
+    
+    RecCount = 1000
+    
+    L = 1
+    
+    Count1 = 0
+    Count2 = 0
+    
+    Sheets(Sheet_Name).Select
+    
+    TCount = (ActiveSheet.UsedRange.Rows.Count) - 1
+    
+    Do Until Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1) = ""
+    
+        Query2 = ""
+        
+        For L = 1 To RecCount
+            If Count2 < TCount Then
+            
+                Query2 = Query2 & "("
+                
+                Do Until Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1) = ""
+                    Query2 = Query2 & "'" & Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1) & "'"
+                    If Sheets(Sheet_Name).Range(Table_Start).Offset(Count2, Count1 + 1) = "" Then
+                        Query2 = Query2 & ")"
+                    Else
+                        Query2 = Query2 & ","
+                    End If
+                    
+                    Count1 = Count1 + 1
+                Loop
+                
+                Count1 = 0
+                Count2 = Count2 + 1
+                
+                If Count2 = TCount Then
+                    Query2 = Query2 & ""
+                    Exit For
+                Else
+                    If L < RecCount Then
+                        Query2 = Query2 & ","
+                    Else
+                        Query2 = Query2 & ""
+                    End If
+                
+                End If
+     
+            Else
+                Exit For
+            End If
+        
+        Next L
+        
+        ' Update Table
+        With rsPubs
+            ' Assign the Connection object.
+            .ActiveConnection = cnPubs
+            ' Extract the required records.
+            .Open Query1 & " " & Query2
+        End With
+    
+    Loop
+
+' Close Connection
+    Call Close_Access_Connect_ADO
+
+End
